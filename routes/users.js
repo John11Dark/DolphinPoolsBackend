@@ -5,8 +5,8 @@ const Joi = require("joi");
 const router = express.Router();
 
 const usersStore = require("../store/users");
-const validateWith = require("../src/middleware/validation");
-const imageResize = require("../src/middleware/imageResize");
+const validateWith = require("../middleware/validation");
+const imageResize = require("../middleware/imageResize");
 
 const upload = multer({
   dest: "uploads/",

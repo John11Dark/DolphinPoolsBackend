@@ -1,4 +1,4 @@
-const userImageMapper = require("../src/mappers/userImagesMapper");
+const userImageMapper = require("../mappers/userImagesMapper");
 
 const users = [
   {

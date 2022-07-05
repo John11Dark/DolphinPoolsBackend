@@ -4,12 +4,12 @@ const Joi = require("joi");
 const { Expo } = require("expo-server-sdk");
 
 const usersStore = require("../store/users");
-const userImageMapper = require("../src/mappers/userImagesMapper");
+const userImageMapper = require("../mappers/userImagesMapper");
 const listingsStore = require("../store/listings");
 const messagesStore = require("../store/messages");
 const sendPushNotification = require("../utilities/pushNotifications");
-const auth = require("../src/middleware/auth");
-const validateWith = require("../src/middleware/validation");
+const auth = require("../middleware/auth");
+const validateWith = require("../middleware/validation");
 
 const schema = {
   listingId: Joi.number().required(),

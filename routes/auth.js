@@ -3,8 +3,8 @@ const router = express.Router();
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const usersStore = require("../store/users");
-const validateWith = require("../src/middleware/validation");
-const userImageMapper = require("../src/mappers/userImagesMapper");
+const validateWith = require("../middleware/validation");
+const userImageMapper = require("../mappers/userImagesMapper");
 
 const schema = {
   email: Joi.string().email().required(),

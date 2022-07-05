@@ -3,8 +3,8 @@ const router = express.Router();
 const Joi = require("joi");
 
 const usersStore = require("../store/users");
-const auth = require("../src/middleware/auth");
-const validateWith = require("../src/middleware/validation");
+const auth = require("../middleware/auth");
+const validateWith = require("../middleware/validation");
 
 router.post(
   "/",

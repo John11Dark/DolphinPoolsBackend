@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const listingsStore = require("../store/listings");
-const auth = require("../src/middleware/auth");
-const listingMapper = require("../src/mappers/listings");
+const auth = require("../middleware/auth");
+const listingMapper = require("../mappers/listings");
 
 router.get("/listings", auth, (req, res) => {
   const listings = listingsStore.filterListings(

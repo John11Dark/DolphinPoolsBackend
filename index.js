@@ -1,17 +1,20 @@
 const express = require("express");
-const categories = require("../routes/categories");
-const listings = require("../routes/listings");
-const listing = require("../routes/listing");
-const users = require("../routes/users");
-const user = require("../routes/user");
-const auth = require("../routes/auth");
-const my = require("../routes/my");
-const comments = require("../routes/comments");
-const messages = require("../routes/messages");
-const expoPushTokens = require("../routes/expoPushTokens");
 const helmet = require("helmet");
 const compression = require("compression");
+
+const categories = require("./routes/categories");
+const listings = require("./routes/listings");
+const listing = require("./routes/listing");
+const users = require("./routes/users");
+const user = require("./routes/user");
+const auth = require("./routes/auth");
+const my = require("./routes/my");
+const comments = require("./routes/comments");
+const messages = require("./routes/messages");
+const expoPushTokens = require("./routes/expoPushTokens");
 const config = require("config");
+
+
 const app = express();
 
 app.use(express.static("public"));

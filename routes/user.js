@@ -3,7 +3,7 @@ const router = express.Router();
 
 const usersStore = require("../store/users");
 const listingsStore = require("../store/listings");
-const auth = require("../src/middleware/auth");
+const auth = require("../middleware/auth");
 
 router.get("/:id", auth, (req, res) => {
   const userId = parseInt(req.params.id);

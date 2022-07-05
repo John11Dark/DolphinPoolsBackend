@@ -1,11 +1,11 @@
 {
-  "name": "done-with-it-backend",
+  "name": "dolphin-pools-ltd-backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/netlify-lambda serve src",
-    "build": "./node_modules/.bin/netlify-lambda build src"
+    "start": "node index.js",
+    "build": "npm install"
   },
   "engines": {
     "node": "12.6.x"

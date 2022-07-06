@@ -10,8 +10,8 @@ const comments = [
       image: [
         {
           thumbnailUrl:
-            "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
-          url: "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
+            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
+          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
         },
       ],
     },
@@ -27,8 +27,8 @@ const comments = [
       image: [
         {
           thumbnailUrl:
-            "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
-          url: "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
+            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
+          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
         },
       ],
     },
@@ -44,8 +44,8 @@ const comments = [
       image: [
         {
           thumbnailUrl:
-            "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
-          url: "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
+            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
+          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
         },
       ],
     },
@@ -61,8 +61,8 @@ const comments = [
       image: [
         {
           thumbnailUrl:
-            "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
-          url: "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
+            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
+          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
         },
       ],
     },
@@ -79,8 +79,8 @@ const initialComment = {
     image: [
       {
         thumbnailUrl:
-          "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
-        url: "http://192.168.1.181:9000/assets/DolphinpoolsApp_thumb.png",
+          "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
+        url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
       },
     ],
   },

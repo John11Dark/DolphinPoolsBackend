@@ -10,7 +10,7 @@ const auth = require("../middleware/auth");
 const imageResize = require("../middleware/imageResize");
 const delay = require("../middleware/delay");
 const listingMapper = require("../mappers/listings");
-//const config = require("../config");
+const config = require("config");
 
 const upload = multer({
   dest: "uploads/",
@@ -68,7 +68,7 @@ router.post(
     // stored in the uploads folder. We'll need to clean up this folder
     // using a separate process.
     // auth,
-    upload.array("images", 3),
+    upload.array("images", config.get("maxImageCount")),
     validateWith(schema),
     // validateCategoryId,
     imageResize,

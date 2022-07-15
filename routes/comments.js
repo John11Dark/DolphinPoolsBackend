@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
 
 // router.patch("/:id", (req, res) => {
 //   const id = parseInt(req.params.id);
-//   console.log(store.getListing(id));
+//   (store.getListing(id));
 //   store.updateList(id, req.body);
 //   console.log(store.getListing(id));
 // });

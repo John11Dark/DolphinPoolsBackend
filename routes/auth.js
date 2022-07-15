@@ -23,7 +23,7 @@ router.post("/", validateWith(schema), (req, res) => {
       name: user.name,
       phoneNumber: user.phoneNumber,
       userName: user.userName,
-      userAvatarImageUri: userImageMapper(user.images),
+      ...userImageMapper(user.images),
       role: user.role,
       email: user.email,
     },

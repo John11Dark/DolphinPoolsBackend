@@ -1,73 +1,5 @@
-const comments = [
-  {
-    comment: "There is no comments to show yet!",
-    id: 0,
-    listingId: 1,
-    dateTime: new Date().toDateString(),
-    user: {
-      name: "John Muller",
-      id: 0,
-      image: [
-        {
-          thumbnailUrl:
-            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-        },
-      ],
-    },
-  },
-  {
-    comment: "There is no comments to show yet!",
-    id: 1,
-    listingId: 1,
-    dateTime: new Date().toDateString(),
-    user: {
-      name: "John Muller",
-      id: 0,
-      image: [
-        {
-          thumbnailUrl:
-            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-        },
-      ],
-    },
-  },
-  {
-    comment: "There is no comments to show yet!",
-    id: 2,
-    listingId: 1,
-    dateTime: new Date().toDateString(),
-    user: {
-      name: "Sara Mathew",
-      id: 0,
-      image: [
-        {
-          thumbnailUrl:
-            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-        },
-      ],
-    },
-  },
-  {
-    comment: "There is no comments to show yet!",
-    id: 0,
-    listingId: 3,
-    dateTime: new Date().toDateString(),
-    user: {
-      name: "Dolphin Pools App",
-      id: 0,
-      image: [
-        {
-          thumbnailUrl:
-            "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-          url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-        },
-      ],
-    },
-  },
-];
+const config = require("config");
+const comments = [];
 
 const initialComment = {
   comment: "There is no comments to show yet!",
@@ -78,9 +10,8 @@ const initialComment = {
     id: 0,
     image: [
       {
-        thumbnailUrl:
-          "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
-        url: "https://dolphinpoolsltdbackend.herokuapp.com/assets/DolphinpoolsApp_thumb.png",
+        thumbnailUrl: `${config.get("assetsBaseUrl")}DolphinPoolsApp_full.jpg`,
+        url: `${config.get("assetsBaseUrl")}DolphinPoolsApp_thumb.jpg`,
       },
     ],
   },
@@ -90,10 +21,13 @@ const getComments = (listingId) => {
   let listComments = comments.filter(
     (listingComments) => listingComments.listingId === listingId
   );
-  if (listComments === undefined || listComments === null) {
-    listComments = [initialComment];
-  }
-  console.log(listComments);
+  if (
+    listComments === undefined ||
+    listComments === null ||
+    listComments.length === 0
+  )
+    listComments.push(initialComment);
+
   return listComments;
 };
 

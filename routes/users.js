@@ -7,6 +7,7 @@ const router = express.Router();
 const usersStore = require("../store/users");
 const validateWith = require("../middleware/validation");
 const imageResize = require("../middleware/imageResize");
+const auth = require("../middleware/auth");
 
 const upload = multer({
   dest: "uploads/",
@@ -14,7 +15,7 @@ const upload = multer({
 });
 
 const schema = {
-  userName: Joi.string().required().min(5),
+  username: Joi.string().required().min(5),
   phoneNumber: Joi.required(),
   name: Joi.string().required().min(2),
   email: Joi.string().email().required(),
@@ -24,13 +25,13 @@ const schema = {
 
 router.post(
   "/",
-  [upload.array("images"), validateWith(schema), imageResize],
+  [upload.array("image"), validateWith(schema), imageResize],
   (req, res) => {
     const user = {
       name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      userName: req.body.userName,
+      username: req.body.username,
       phoneNumber: req.body.phoneNumber,
       role: req.body.role,
     };
@@ -45,17 +46,53 @@ router.post(
       return res
         .status(400)
         .send({ error: "A user with the given phone number already exists." });
-    } else if (usersStore.getUserUsername(user.userName)) {
+    } else if (usersStore.getUserUsername(user.username)) {
       return res
         .status(400)
         .send({ error: "A user with the given username already exists." });
     } else {
       usersStore.addUser(user);
-      console.log(user);
       res.status(201).send(user);
     }
   }
 );
+
+router.patch("/:id", auth, (req, res) => {
+  const data = req.body;
+  const userId = parseInt(req.params.id);
+  const user = usersStore.updateUser(userId);
+  if (data.oldPassword) {
+    if (user.password !== data.oldPassword)
+      return res.status(400).send({ message: "old password is incorrect" });
+    user.oldPassword = data.oldPassword;
+    user.password = data.oldPassword;
+  } else if (usersStore.getUserByEmail(data.email)) {
+    return res
+      .status(400)
+      .send({ error: "A user with the given email already exists." });
+  } else if (usersStore.getUserByPhoneNumber(data.phoneNumber)) {
+    return res
+      .status(400)
+      .send({ error: "A user with the given phone number already exists." });
+  } else if (usersStore.getUserUsername(data.username)) {
+    return res
+      .status(400)
+      .send({ error: "A user with the given username already exists." });
+  } else if (
+    !usersStore.getUserByPhoneNumber(data.phoneNumber) &&
+    !usersStore.getUserUsername(data.username) &&
+    !usersStore.getUserByEmail(data.email)
+  ) {
+    user.email = data.email;
+    user.name = data.name;
+    user.username = data.username;
+    user.phoneNumber = data.email;
+    if (data.role) user.role = data.role;
+    user.updated = Date.now().toLocaleString();
+    usersStore.addUser(user);
+    res.status(201).send(user);
+  }
+});
 
 router.get("/", (req, res) => {
   res.send(usersStore.getUsers());

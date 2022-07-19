@@ -70,7 +70,7 @@ let users = [
     countryCode: "+356",
     phoneNumber: "79230090",
     role: "Administrator",
-    images: [{ fileName: "DolphinPoolsApp" }],
+    images: [{ fileName: "DolphinPoolApp" }],
     id: 6,
   },
 ];

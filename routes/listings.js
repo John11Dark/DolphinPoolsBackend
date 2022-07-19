@@ -21,7 +21,7 @@ const upload = multer({
 // validation schema
 const schema = {
   clientAddressStreetOne: Joi.string().optional(),
-  clientAddressStreetTwo: Joi.string().optional(),
+  clientAddressStreetTwo: Joi.optional(),
   clientAddressLocality: Joi.string().required(),
   location: Joi.object({
     latitude: Joi.number().optional(),
@@ -34,15 +34,16 @@ const schema = {
   description: Joi.string().optional().allow(""),
   email: Joi.string().email(),
   title: Joi.string().required(),
-  status: Joi.boolean().optional(),
+  status: Joi.optional(),
   initialDate: Joi.date().required(),
   // pool pickers
-  projectType_ID: Joi.number().required(),
-  poolType_ID: Joi.number().required(),
-  poolLocation_ID: Joi.number().required(),
-  indoor: Joi.boolean().required(),
-  poolLeaking: Joi.boolean().required(),
-  poolSteps: Joi.boolean().required(),
+  projectType: Joi.required(),
+  poolType_ID: Joi.required(),
+  poolLocation_ID: Joi.required(),
+  indoor: Joi.required(),
+  mosaicOrTile: Joi.required(),
+  poolSteps: Joi.required(),
+  poolLeaking: Joi.required(),
   options: Joi.object().optional({
     item: Joi.object({
       label: Joi.string(),
@@ -75,6 +76,7 @@ const schema = {
   spaJets: Joi.optional(),
   counterCurrent: Joi.optional(),
   vacuumPoints: Joi.optional(),
+  finalPrice: Joi.optional(),
   user: Joi.object({
     name: Joi.required(),
     id: Joi.required(),
@@ -116,14 +118,14 @@ router.post(
       clientFirstName: data.clientFirstName,
       clientLastName: data.clientLastName,
       clientAddressStreetOne: data.clientAddressStreetOne,
-      clientAddressStreetTwo: data.clientAddressStreetTwo,
       clientAddressLocality: data.clientAddressLocality,
-      projectType_ID: parseInt(data.projectType_ID),
+      projectType: parseInt(data.projectType),
       poolType_ID: parseInt(data.poolType_ID),
       poolLocation_ID: parseInt(data.poolLocation_ID),
       poolLeaking: data.poolLeaking,
       poolSteps: data.poolSteps,
       indoor: data.Indoor,
+      mosaicOrTileBorder: data.mosaicOrTileBorder,
       description: data.description,
       initialDate: data.initialDate,
       status: data.status,
@@ -152,6 +154,9 @@ router.post(
     };
     listing.images = req.images.map((fileName) => ({ fileName: fileName }));
     if (data.options) listing.options = data.options;
+    if (data.finalPrice) listing.finalPrice = data.finalPrice;
+    if (data.clientAddressStreetTwo)
+      listing.clientAddressStreetTwo = data.clientAddressStreetTwo;
     store.addListing(listing);
     res.status(201).send(listing);
   }

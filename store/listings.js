@@ -14,9 +14,18 @@ let listings = [
     clientAddressStreetOne: "Triq, 49",
     clientAddressStreetTwo: "haddingle Street",
     clientAddressLocality: "ir-rabat",
-    questionTypePicker_ID: 1,
-    poolType_ID: 01,
-    poolLocation_ID: 003,
+    projectType: {
+      value: 1,
+      label: "new pool",
+    },
+    poolType_ID: {
+      value: 1,
+      label: "skimmer",
+    },
+    poolLocation_ID: {
+      value: 1,
+      label: "aboveground",
+    },
     poolLength: 25.2,
     poolWidth: 25.25,
     poolDepthStart: 25.254,
@@ -35,10 +44,19 @@ let listings = [
     spaJets: 1,
     counterCurrent: 1,
     vacuumPoints: 1,
-    projectType: "Commercial",
-    poolType: "Skimmer",
-    poolLocation: "Above Ground",
-    poolAreaLocation: "Outdoor",
+    projectType: {
+      value: 1,
+      label: "Commercial",
+    },
+    poolType_ID: {
+      value: 1,
+      label: "Well",
+    },
+    poolLocation_ID: {
+      value: 1,
+      label: "aboveground",
+    },
+    outdoor: true,
     poolSteps: true,
     mosaicOrTileBorder: true,
     poolLeaking: true,
@@ -75,9 +93,18 @@ let listings = [
     clientAddressStreetTwo: "49",
     clientAddressLocality: "Rabat",
     clientPhoneNumber: "79992300",
-    questionTypePicker_ID: 1,
-    poolType_ID: 1,
-    poolLocation_ID: 4,
+    projectType: {
+      value: 1,
+      label: "new pool",
+    },
+    poolType_ID: {
+      value: 1,
+      label: "skimmer",
+    },
+    poolLocation_ID: {
+      value: 1,
+      label: "aboveground",
+    },
     poolLength: 25,
     poolWidth: 25,
     poolDepthStart: 25,
@@ -98,13 +125,18 @@ let listings = [
       latitude: 35.878173828125,
       longitude: 14.396160663677879,
     },
+    outdoor: false,
+    poolSteps: false,
+    mosaicOrTileBorder: true,
+    poolLeaking: false,
     id: 2,
     user: {
       id: 8,
       name: "Dolphin Pools",
       role: "Administrator",
-      image: "http://192.168.1.181:9000/assets/JohnMuller_full.jpg",
+      image: "http://192.168.1.181:9000/assets/DolphinPoolApp_full.jpg",
     },
+    finalPrice: 4100.0,
   },
   {
     title: "Il-mellieha Over flow pool",
@@ -116,10 +148,22 @@ let listings = [
     clientAddressStreetTwo: "49",
     clientAddressLocality: "Rabat",
     clientPhoneNumber: "79992300",
-
-    questionTypePicker_ID: 1,
-    poolType_ID: 1,
-    poolLocation_ID: 4,
+    outdoor: true,
+    poolSteps: true,
+    mosaicOrTileBorder: false,
+    poolLeaking: false,
+    projectType: {
+      value: 3,
+      label: "new pool",
+    },
+    poolType_ID: {
+      value: 2,
+      label: "overflow",
+    },
+    poolLocation_ID: {
+      value: 4,
+      label: "aboveground",
+    },
     poolLength: 25,
     poolWidth: 25,
     poolDepth: 25,
@@ -146,6 +190,7 @@ let listings = [
       role: "Administrator",
       image: "http://192.168.1.181:9000/assets/JohnMuller_full.jpg",
     },
+    finalPrice: 4000.0,
   },
   {
     title: "This is the second pool",
@@ -158,9 +203,10 @@ let listings = [
     initialDate: "2022/7/13",
     id: 4,
     images: [
-      { fileName: "fourthPool" },
-      { fileName: "fourthPool" },
-      { fileName: "fourthPool" },
+      { fileName: "PoolOne" },
+      { fileName: "PoolThree" },
+      { fileName: "PoolTwo" },
+      { fileName: "PoolFour" },
     ],
     status: "false",
     numberOfWallInlets: "1",
@@ -170,9 +216,18 @@ let listings = [
     spaJets: "1",
     counterCurrent: "1",
     vacuumPoints: "1",
-    questionTypePicker_ID: "2",
-    poolType_ID: "1",
-    poolLocation_ID: "1",
+    projectType: {
+      value: 1,
+      label: "new pool",
+    },
+    poolType_ID: {
+      value: 1,
+      label: "skimmer",
+    },
+    poolLocation_ID: {
+      value: 1,
+      label: "aboveground",
+    },
     poolLength: "575.4",
     poolWidth: "1.5",
     poolDepthEnd: "45.",
@@ -194,6 +249,11 @@ let listings = [
       role: "Administrator",
       image: "http://192.168.1.181:9000/assets/JohnMuller_full.jpg",
     },
+    finalPrice: 5800.0,
+    outdoor: false,
+    poolSteps: true,
+    mosaicOrTileBorder: false,
+    poolLeaking: true,
   },
 ];
 
@@ -208,55 +268,18 @@ let archivedListings = [
     clientAddressStreetTwo: "49",
     clientAddressLocality: "Rabat",
     clientPhoneNumber: "79992300",
-
-    questionTypePicker_ID: 1,
-    poolType_ID: 1,
-    poolLocation_ID: 4,
-    poolLength: 25,
-    poolWidth: 25,
-    poolDepth: 25,
-    poolPerimeter: 25,
-    copingPerimeter: 25,
-    balanceLength: 25,
-    description:
-      "This is some text to explain about the pool and re marks or question to be considered",
-    initialDate: "20220611",
-    status: "false",
-    images: [
-      { fileName: "PoolOne" },
-      { fileName: "PoolThree" },
-      { fileName: "PoolTwo" },
-    ],
-    location: {
-      latitude: 35.878173828125,
-      longitude: 14.396160663677879,
+    projectType: {
+      value: 1,
+      label: "new pool",
     },
-    id: 4,
-    user: {
-      id: 1,
-      name: "John Muller",
-      role: "Administrator",
-      image: "http://192.168.1.181:9000/assets/JohnMuller_full.jpg",
+    poolType_ID: {
+      value: 1,
+      label: "skimmer",
     },
-    isInArchive: true,
-  },
-];
-
-let deletedLists = [
-  {
-    title: "Il-mellieha Over flow pool",
-    email: "john@mail.com",
-    countryCode: "+356",
-    clientFirstName: "First Name",
-    clientLastName: "Last Name",
-    clientAddressStreetOne: "Triq Ħad-Dingli",
-    clientAddressStreetTwo: "49",
-    clientAddressLocality: "Rabat",
-    clientPhoneNumber: "79992300",
-
-    questionTypePicker_ID: 1,
-    poolType_ID: 1,
-    poolLocation_ID: 4,
+    poolLocation_ID: {
+      value: 1,
+      label: "aboveground",
+    },
     poolLength: 25,
     poolWidth: 25,
     poolDepth: 25,
@@ -277,6 +300,68 @@ let deletedLists = [
       longitude: 14.396160663677879,
     },
     id: 5,
+    outdoor: false,
+    poolSteps: true,
+    mosaicOrTileBorder: true,
+    poolLeaking: false,
+    user: {
+      id: 1,
+      name: "John Muller",
+      role: "Administrator",
+      image: "http://192.168.1.181:9000/assets/JohnMuller_full.jpg",
+    },
+    isInArchive: true,
+    finalPrice: 6800.0,
+  },
+];
+
+let deletedLists = [
+  {
+    title: "Il-mellieha Over flow pool",
+    email: "john@mail.com",
+    countryCode: "+356",
+    clientFirstName: "First Name",
+    clientLastName: "Last Name",
+    clientAddressStreetOne: "Triq Ħad-Dingli",
+    clientAddressStreetTwo: "49",
+    clientAddressLocality: "Rabat",
+    clientPhoneNumber: "79992300",
+    outdoor: true,
+    poolSteps: true,
+    mosaicOrTileBorder: true,
+    poolLeaking: true,
+    projectType: {
+      value: 1,
+      label: "new pool",
+    },
+    poolType_ID: {
+      value: 1,
+      label: "skimmer",
+    },
+    poolLocation_ID: {
+      value: 1,
+      label: "aboveground",
+    },
+    poolLength: 25,
+    poolWidth: 25,
+    poolDepth: 25,
+    poolPerimeter: 25,
+    copingPerimeter: 25,
+    balanceLength: 25,
+    description:
+      "This is some text to explain about the pool and re marks or question to be considered",
+    initialDate: "20220611",
+    status: "false",
+    images: [
+      { fileName: "PoolOne" },
+      { fileName: "PoolThree" },
+      { fileName: "PoolTwo" },
+    ],
+    location: {
+      latitude: 35.878173828125,
+      longitude: 14.396160663677879,
+    },
+    id: 6,
     user: {
       id: 1,
       name: "John Muller",
@@ -286,6 +371,7 @@ let deletedLists = [
     isInArchive: false,
     isInRecycleBin: true,
     addedData: Date.now().toLocaleString(),
+    finalPrice: 1500.0,
   },
 ];
 
@@ -340,6 +426,7 @@ const restoreListing = (id) => {
   return list[0];
 };
 const updateList = (id, values) => {
+  console.log(values, id);
   let newList = getListing(id);
   listings = listings.filter((list) => list.id !== id);
   newList.status = values["status"];

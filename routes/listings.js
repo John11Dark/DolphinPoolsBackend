@@ -20,55 +20,71 @@ const upload = multer({
 
 // validation schema
 const schema = {
-  clientAddressStreetOne: Joi.string().optional(),
-  clientAddressStreetTwo: Joi.optional(),
-  clientAddressLocality: Joi.string().required(),
-  location: Joi.object({
-    latitude: Joi.number().optional(),
-    longitude: Joi.number().optional(),
-  }).optional(),
+  // ? * --> project required details
+
+  // ?  * --> // User who created the list
+  user: Joi.object({
+    name: Joi.required(),
+    id: Joi.required(),
+    image: Joi.required(),
+    role: Joi.required(),
+  }).required(),
+
+  site: Joi.string().required(),
+
+  address: Joi.object({
+    streetLineOne: Joi.string().required(),
+    streetLineTwo: Joi.optional(),
+    locality: Joi.string().required(),
+
+    // ! * --> location is set to optional in case the user did not give a permission
+    location: Joi.object({
+      latitude: Joi.number().required(),
+      latitudeDelta: Joi.number().optional(),
+      longitude: Joi.number().required(),
+      longitudeDelta: Joi.number().optional(),
+    }).optional(),
+  }).required(),
+
+  countryCode: Joi.string().required(),
   clientPhoneNumber: Joi.required(),
-  countryCode: Joi.string().optional(),
   clientFirstName: Joi.string().required(),
   clientLastName: Joi.string().required(),
-  description: Joi.string().optional().allow(""),
-  email: Joi.string().email(),
-  title: Joi.string().required(),
-  status: Joi.optional(),
+  email: Joi.string().email().required(),
   initialDate: Joi.date().required(),
-  // pool pickers
-  projectType: Joi.required(),
-  poolType_ID: Joi.required(),
-  poolLocation_ID: Joi.required(),
+  status: Joi.required(),
+
+  // ? * -->  Pickers ids
+  projectType_Id: Joi.number().required(),
+  poolLocation_Id: Joi.number().required(),
+  tileType_Id: Joi.number().required(),
+
+  // ? * --> Check box boolean
+  newPool: Joi.required(),
+  quotationType: Joi.required(),
   indoor: Joi.required(),
-  mosaicOrTile: Joi.required(),
+  poolType: Joi.required(),
   poolSteps: Joi.required(),
-  poolLeaking: Joi.required(),
-  options: Joi.object().optional({
-    item: Joi.object({
-      label: Joi.string(),
-      value: Joi.number(),
-    }),
-  }),
-  packages: Joi.object().optional({
-    item: Joi.object({
-      label: Joi.string().optional(),
-      value: Joi.number().optional(),
-    }),
-  }),
-  // pool parameters
+  poolLeaking: Joi.optional(),
+
+  // ? * -->  Pool parameters required
   poolLength: Joi.required(),
   poolWidth: Joi.required(),
-  poolPerimeter: Joi.required(),
-  copingPerimeter: Joi.required(),
   poolDepthEnd: Joi.required(),
   poolDepthStart: Joi.required(),
-  balanceLength: Joi.required(),
-  balanceTankWidth: Joi.required(),
-  balanceTankDepth: Joi.required(),
-  balanceTankPipe: Joi.required(),
   poolVolume: Joi.required(),
-  // optional futures
+
+  poolPerimeter: Joi.required(),
+  copingPerimeter: Joi.required(),
+
+  // ! * --> balance tank parameters
+  balanceLength: Joi.optional(),
+  balanceWidth: Joi.optional(),
+  balanceTankWidth: Joi.optional(),
+  balanceTankDepth: Joi.optional(),
+  balanceTankVolume: Joi.optional(),
+
+  // ? * -->  optional futures
   numberOfWallInlets: Joi.optional(),
   numberOfSkimmers: Joi.optional(),
   numberOfSumps: Joi.optional(),
@@ -76,12 +92,15 @@ const schema = {
   spaJets: Joi.optional(),
   counterCurrent: Joi.optional(),
   vacuumPoints: Joi.optional(),
+  options: Joi.optional({
+    item: Joi.object({
+      label: Joi.string(),
+      value: Joi.number(),
+    }),
+  }),
+  selectedPackage: Joi.optional(),
   finalPrice: Joi.optional(),
-  user: Joi.object({
-    name: Joi.required(),
-    id: Joi.required(),
-    image: Joi.required(),
-  }).required(),
+  description: Joi.string().optional().allow(""),
 };
 
 // get all listings
@@ -109,41 +128,52 @@ router.post(
   ],
 
   async (req, res) => {
+    //  * --> get data from the body
     const data = req.body;
+    console.log(data);
+
+    // initialize and declare the list * -->
+
     const listing = {
-      title: data.title,
+      // ? * --> required details
+      user: JSON.parse(data.user),
+      site: data.site,
       email: data.email,
       countryCode: data.countryCode ? data.countryCode : "+356",
-      ClientPhoneNumber: data.clientPhoneNumber,
+      clientPhoneNumber: data.clientPhoneNumber,
       clientFirstName: data.clientFirstName,
       clientLastName: data.clientLastName,
-      clientAddressStreetOne: data.clientAddressStreetOne,
-      clientAddressLocality: data.clientAddressLocality,
-      projectType: parseInt(data.projectType),
-      poolType_ID: parseInt(data.poolType_ID),
-      poolLocation_ID: parseInt(data.poolLocation_ID),
-      poolLeaking: data.poolLeaking,
-      poolSteps: data.poolSteps,
-      indoor: data.Indoor,
-      mosaicOrTileBorder: data.mosaicOrTileBorder,
-      description: data.description,
+      address: JSON.parse(data.address),
       initialDate: data.initialDate,
       status: data.status,
-      user: JSON.parse(data.user),
-      location: JSON.parse(data.location),
-      // pool parameters
+
+      // ? * --> Pickers ids
+      tileType_Id: parseInt(data.poolType_Id),
+      projectType_Id: parseInt(data.tileType_Id),
+      poolLocation_Id: parseInt(data.poolLocation_Id),
+
+      // ? * --> check boxes required
+
+      indoor: data.Indoor,
+      poolSteps: data.poolSteps,
+      quotationType: data.poolSteps,
+      newPool: data.poolSteps,
+      poolType: data.poolSteps,
+
+      // ? * -->  Pool parameters
       poolLength: data.poolLength,
       poolWidth: data.poolWidth,
-      poolPerimeter: data.poolPerimeter,
-      copingPerimeter: data.copingPerimeter,
       poolDepthEnd: data.poolDepthEnd,
       poolDepthStart: data.poolDepthStart,
+      poolVolume: data.poolVolume,
+
+      // ? * --> balance tank Parameters
       balanceLength: data.balanceLength,
       balanceTankWidth: data.balanceTankWidth,
       balanceTankDepth: data.balanceTankDepth,
-      balanceTankPipe: data.balanceTankPipe,
-      poolVolume: data.poolVolume,
-      // options
+      balanceTankVolume: data.balanceTankDepth,
+
+      // ? * -->  optional options
       numberOfWallInlets: data.numberOfWallInlets,
       numberOfSkimmers: data.numberOfSkimmers,
       numberOfSumps: data.numberOfSumps,
@@ -151,14 +181,23 @@ router.post(
       spaJets: data.spaJets,
       counterCurrent: data.counterCurrent,
       vacuumPoints: data.vacuumPoints,
+
+      poolLeaking: data.poolLeaking,
+
+      description: data.description,
+
+      poolPerimeter: data.poolPerimeter,
+      copingPerimeter: data.copingPerimeter,
+      options: JSON.parse(data.options),
+      finalPrice: data.finalPrice,
     };
+
     listing.images = req.images.map((fileName) => ({ fileName: fileName }));
-    if (data.options) listing.options = data.options;
-    if (data.finalPrice) listing.finalPrice = data.finalPrice;
-    if (data.clientAddressStreetTwo)
-      listing.clientAddressStreetTwo = data.clientAddressStreetTwo;
+    //  * --> store listing after finished
     store.addListing(listing);
-    res.status(201).send(listing);
+
+    // ? *--> send response that everything ok
+    res.status(201).send();
   }
 );
 

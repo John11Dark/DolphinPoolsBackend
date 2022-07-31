@@ -12,6 +12,7 @@ const my = require("./routes/my");
 const comments = require("./routes/comments");
 const errorLogs = require("./routes/errorLogs");
 const messages = require("./routes/messages");
+const images = require("./routes/images");
 const expoPushTokens = require("./routes/expoPushTokens");
 const config = require("config");
 
@@ -22,6 +23,7 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(helmet());
 app.use(compression());
+//app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/categories", categories);
 app.use("/api/listing", listing);
@@ -34,6 +36,7 @@ app.use("/api/auth", auth);
 app.use("/api/my", my);
 app.use("/api/expoPushTokens", expoPushTokens);
 app.use("/api/messages", messages);
+app.use("/api/images", images);
 
 // io.on("connection", socket =>{
 //   const id = socket.handshake.query.id

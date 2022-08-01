@@ -1,3 +1,4 @@
+const config = require("config");
 const userImageMapper = require("../mappers/userImagesMapper");
 const listingsStore = require("./listings");
 

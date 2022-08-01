@@ -1,4 +1,5 @@
 // variables
+const config = require("config");
 
 let listings = [
   {

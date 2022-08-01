@@ -55,9 +55,9 @@ const schema = {
   status: Joi.required(),
 
   // ? * -->  Pickers ids
-  projectType_Id: Joi.number().required(),
-  poolLocation_Id: Joi.number().required(),
-  tileType_Id: Joi.number().required(),
+  projectType: Joi.object().required(),
+  poolLocation: Joi.object().required(),
+  tileType: Joi.object().required(),
 
   // ? * --> Check box boolean
   newPool: Joi.required(),
@@ -148,9 +148,9 @@ router.post(
       status: data.status,
 
       // ? * --> Pickers ids
-      tileType_Id: parseInt(data.poolType_Id),
-      projectType_Id: parseInt(data.tileType_Id),
-      poolLocation_Id: parseInt(data.poolLocation_Id),
+      tileType: JSON.parse(data.poolType),
+      projectType: JSON.parse(data.tileType),
+      poolLocation: JSON.parse(data.poolLocation),
 
       // ? * --> check boxes required
 

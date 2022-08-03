@@ -24,7 +24,7 @@ router.get("/:id", auth, (req, res) => {
     id: user.id,
     name: user.name,
     email: user.email,
-    userName: user.userName,
+    username: user.username,
     phoneNumber: user.phoneNumber,
     userRole: user.userRole,
     listings: listings.length,

@@ -35,7 +35,7 @@ const schema = {
   address: Joi.object({
     streetLineOne: Joi.string().required(),
     streetLineTwo: Joi.optional(),
-    locality: Joi.string().required(),
+    locality: Joi.number().required(),
 
     // ! * --> location is set to optional in case the user did not give a permission
     location: Joi.object({
@@ -128,76 +128,88 @@ router.post(
   ],
 
   async (req, res) => {
-    //  * --> get data from the body
-    const data = req.body;
-    console.log(data);
+    try {
+      //  * --> get data from the body
+      const data = req.body;
+      console.log(data);
 
-    // initialize and declare the list * -->
+      // initialize and declare the list * -->
 
-    const listing = {
-      // ? * --> required details
-      user: JSON.parse(data.user),
-      site: data.site,
-      email: data.email,
-      countryCode: data.countryCode ? data.countryCode : "+356",
-      clientPhoneNumber: data.clientPhoneNumber,
-      clientFirstName: data.clientFirstName,
-      clientLastName: data.clientLastName,
-      address: JSON.parse(data.address),
-      initialDate: data.initialDate,
-      status: data.status,
+      const listing = {
+        // ? * --> required details
+        user: JSON.parse(data.user),
+        site: data.site,
+        email: data.email,
+        countryCode: data.countryCode ? data.countryCode : "+356",
+        clientPhoneNumber: data.clientPhoneNumber,
+        clientFirstName: data.clientFirstName,
+        clientLastName: data.clientLastName,
+        address: JSON.parse(data.address),
+        initialDate: data.initialDate,
+        status: data.status,
 
-      // ? * --> Pickers ids
-      tileType: JSON.parse(data.poolType),
-      projectType: JSON.parse(data.tileType),
-      poolLocation: JSON.parse(data.poolLocation),
+        // ? * --> Pickers ids
+        tileType: JSON.parse(data.poolType),
+        projectType: JSON.parse(data.tileType),
+        poolLocation: JSON.parse(data.poolLocation),
 
-      // ? * --> check boxes required
+        // ? * --> check boxes required
 
-      indoor: data.Indoor,
-      poolSteps: data.poolSteps,
-      quotationType: data.poolSteps,
-      newPool: data.poolSteps,
-      poolType: data.poolSteps,
+        indoor: data.indoor ? JSON.parse(data.indoor) : false,
+        poolSteps: data.poolSteps ? JSON.parse(data.poolSteps) : false,
+        quotationType: data.quotationType
+          ? JSON.parse(data.quotationType)
+          : false,
+        poolType: data.poolType ? JSON.parse(data.poolType) : false,
+        newPool:
+          !data.newPool === undefined || !data.newPool === "undefined"
+            ? JSON.parse(data.newPool)
+            : false,
 
-      // ? * -->  Pool parameters
-      poolLength: data.poolLength,
-      poolWidth: data.poolWidth,
-      poolDepthEnd: data.poolDepthEnd,
-      poolDepthStart: data.poolDepthStart,
-      poolVolume: data.poolVolume,
+        // ? * -->  Pool parameters
+        poolLength: data.poolLength,
+        poolWidth: data.poolWidth,
+        poolDepthEnd: data.poolDepthEnd,
+        poolDepthStart: data.poolDepthStart,
+        poolVolume: data.poolVolume,
 
-      // ? * --> balance tank Parameters
-      balanceLength: data.balanceLength,
-      balanceTankWidth: data.balanceTankWidth,
-      balanceTankDepth: data.balanceTankDepth,
-      balanceTankVolume: data.balanceTankDepth,
+        // ? * --> balance tank Parameters
+        balanceLength: data.balanceLength,
+        balanceTankWidth: data.balanceTankWidth,
+        balanceTankDepth: data.balanceTankDepth,
+        balanceTankVolume: data.balanceTankDepth,
 
-      // ? * -->  optional options
-      numberOfWallInlets: data.numberOfWallInlets,
-      numberOfSkimmers: data.numberOfSkimmers,
-      numberOfSumps: data.numberOfSumps,
-      numberOfLights: data.numberOfLights,
-      spaJets: data.spaJets,
-      counterCurrent: data.counterCurrent,
-      vacuumPoints: data.vacuumPoints,
+        // ? * -->  optional options
+        numberOfWallInlets: data.numberOfWallInlets,
+        numberOfSkimmers: data.numberOfSkimmers,
+        numberOfSumps: data.numberOfSumps,
+        numberOfLights: data.numberOfLights,
+        spaJets: data.spaJets,
+        counterCurrent: data.counterCurrent,
+        vacuumPoints: data.vacuumPoints,
 
-      poolLeaking: data.poolLeaking,
+        poolLeaking: JSON.parse(data.poolLeaking),
 
-      description: data.description,
+        description: data.description,
 
-      poolPerimeter: data.poolPerimeter,
-      copingPerimeter: data.copingPerimeter,
-      options: JSON.parse(data.options),
-      finalPrice: data.finalPrice,
-    };
+        poolPerimeter: data.poolPerimeter,
+        copingPerimeter: data.copingPerimeter,
+        options: JSON.parse(data.options),
+        finalPrice: data.finalPrice,
+      };
+      listing.images = req.images.map((fileName) => ({ fileName: fileName }));
+      //  * --> store listing after finished
+      store.addListing(listing);
 
-    listing.images = req.images.map((fileName) => ({ fileName: fileName }));
-    //  * --> store listing after finished
-    store.addListing(listing);
-
-    // ? *--> send response that everything ok
-    res.status(201).send();
+      // ? *--> send response that everything ok
+      res.status(201).send();
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        error:
+          "unknown error occurred on the server please contact the administrator",
+      });
+    }
   }
 );
 

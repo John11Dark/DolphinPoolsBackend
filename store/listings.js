@@ -18,10 +18,7 @@ let listings = [
     address: {
       streetLineOne: "StreetOne",
       streetLineTwo: undefined,
-      locality: {
-        label: "Il-Birgu Vittoriosa",
-        id: 4,
-      },
+      locality: 3,
       location: {
         latitude: 35.89099722016769,
         longitude: 14.461754106055244,
@@ -103,10 +100,7 @@ let listings = [
     address: {
       streetLineOne: "StreetOne",
       streetLineTwo: undefined,
-      locality: {
-        label: "Il-Birgu Vittoriosa",
-        id: 4,
-      },
+      locality: 12,
       location: {
         latitude: 35.89099722016769,
         longitude: 14.461754106055244,
@@ -192,10 +186,7 @@ let listings = [
     address: {
       streetLineOne: "StreetOne",
       streetLineTwo: undefined,
-      locality: {
-        label: "Ħ'Attard",
-        id: 1,
-      },
+      locality: 7,
       location: {
         latitude: 35.89099722016769,
         longitude: 14.461754106055244,
@@ -284,10 +275,7 @@ let archivedListings = [
     address: {
       streetLineOne: "StreetOne",
       streetLineTwo: undefined,
-      locality: {
-        label: "Ħ'Attard",
-        id: 1,
-      },
+      locality: 4,
       location: {
         latitude: 35.89099722016769,
         longitude: 14.461754106055244,
@@ -377,10 +365,7 @@ let deletedLists = [
     address: {
       streetLineOne: "StreetOne",
       streetLineTwo: undefined,
-      locality: {
-        label: "Ħ'Attard",
-        id: 1,
-      },
+      locality: 4,
       location: {
         latitude: 35.89099722016769,
         longitude: 14.461754106055244,

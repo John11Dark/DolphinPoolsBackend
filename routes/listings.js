@@ -146,11 +146,11 @@ router.post(
         clientLastName: data.clientLastName,
         address: JSON.parse(data.address),
         initialDate: data.initialDate,
-        status: data.status,
+        status: JSON.parse(data.status),
 
         // ? * --> Pickers ids
-        tileType: JSON.parse(data.poolType),
-        projectType: JSON.parse(data.tileType),
+        tileType: JSON.parse(data.tileType),
+        projectType: JSON.parse(data.projectType),
         poolLocation: JSON.parse(data.poolLocation),
 
         // ? * --> check boxes required

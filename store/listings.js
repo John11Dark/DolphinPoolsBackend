@@ -27,7 +27,7 @@ let listings = [
       },
     },
     initialDate: "Wed Jul 20 2022",
-    status: "false",
+    status: false,
     tileType: {
       label: "Mosaic",
       value: 1,

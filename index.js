@@ -1,7 +1,10 @@
 const express = require("express");
 const helmet = require("helmet");
 const compression = require("compression");
+const config = require("config");
+
 //const io = require("socket.io")(port);
+
 const categories = require("./routes/categories");
 const listings = require("./routes/listings");
 const listing = require("./routes/listing");
@@ -14,10 +17,14 @@ const errorLogs = require("./routes/errorLogs");
 const messages = require("./routes/messages");
 const images = require("./routes/images");
 const expoPushTokens = require("./routes/expoPushTokens");
-const config = require("config");
 
+const mongoose = require("mongoose");
+const dataBase = mongoose.connection;
 const app = express();
+
 const port = process.env.PORT || config.get("port");
+const dataBaseUrl = process.env.dataBaseUrl || config.get("DATABASE_URL");
+const localIP = process.env.localIpAddress || config.get("localIpAddress");
 
 app.use(express.static("public"));
 app.use(express.json());
@@ -42,6 +49,14 @@ app.use("/api/images", images);
 //   const id = socket.handshake.query.id
 //   socket.join(id)
 // })
+
+mongoose.connect(dataBaseUrl, {
+  useNewUrlParser: true,
+});
+
+dataBase.on("error", (error) => console.error("db error", error));
+dataBase.on("open", () => console.log("connected to database"));
+
 app.listen(port, function () {
-  console.log(`Server started on port ${port}...`);
+  console.log(`Server has started on  ${localIP}:${port}...`);
 });

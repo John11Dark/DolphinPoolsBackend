@@ -1,43 +1,62 @@
+// ? * --> Single user Routers
 const express = require("express");
 const router = express.Router();
-
+// * -->
 const usersStore = require("../store/users");
 const listingsStore = require("../store/listings");
 const auth = require("../middleware/auth");
-const listingMapper = require("../mappers/listings");
 
-router.delete("/:id", (req, res) => {
-  const userId = parseInt(req.params.id);
-  usersStore.deleteUser(userId);
-  res.status(201).send({ message: "user has been removed!" });
+// ? * --> Routers
+
+/// *-->// Delete Single user By ID
+router.delete("/:id", async (req, res) => {
+  try {
+    usersStore.deleteUser(req.id);
+    res.status(201).send({ message: "user has been removed!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "unknown error occurred" });
+  }
 });
 
-router.get("/:id", auth, (req, res) => {
-  const userId = parseInt(req.params.id);
-  const user = usersStore.getUserById(userId);
-  if (!user) return res.status(404).send();
-
-  const listings = listingsStore.filterListings(
-    (listing) => listing.userId === userId
-  );
-  res.send({
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    username: user.username,
-    phoneNumber: user.phoneNumber,
-    userRole: user.userRole,
-    listings: listings.length,
-  });
+/// *-->// Get user by Id
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await usersStore.getUserById(req.params.id, true);
+    if (!user) return res.status(404).send({ message: "user not found 404!" });
+    res.status(201).send(user);
+  } catch (error) {
+    console.error("error", error);
+    res.status(500).send({ message: "unknown error occurred" });
+  }
 });
 
-router.get("/:id/listings", auth, (req, res) => {
-  const id = parseInt(req.params.id);
-  const listings = listingsStore.filterListings(
-    (listing) => listing.user.id === id
-  );
-  const resources = listings.map(listingMapper);
-  res.status(201).send(resources);
+/// *-->// Get user listings
+router.get("/:id/listings", auth, async (req, res) => {
+  try {
+    const listings = await listingsStore.filterListings(
+      (list) => list.user.id === req._id
+    );
+    res.status(201).send(listings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "unknown error occurred" });
+  }
 });
 
+/// *-->// update single user
+
+router.patch("/:id", auth, async (req, res) => {
+  const user = req.body;
+  user._id = req.params.id;
+  const response = await usersStore.updateUser(user);
+  if (response.flag === "notFound")
+    return res.status(404).send({
+      message:
+        "unknown error occurred no user with the given id found please close and re-open the application if you have deleted the user before ",
+    });
+  if (response.flag === "updated")
+    return res.status(201).send(response.updatedUser);
+  if (response.flag === "error") return res.status(400).send(response.error);
+});
 module.exports = router;

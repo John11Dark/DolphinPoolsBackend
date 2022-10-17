@@ -1,161 +1,141 @@
-const config = require("config");
+// ? * -->
+const bcrypt = require("bcryptjs");
+
+const userObject = require("../Models/usersModel");
 const userImageMapper = require("../mappers/userImagesMapper");
-const listingsStore = require("./listings");
 
-let users = [
-  {
-    name: "John Muller",
-    username: "John1_1Dark",
-    DateOfBirth: "16-3-2001",
-    role: "Administrator",
-    countryCode: "+356",
-    phoneNumber: "79230096",
-    email: "john@domain.com",
-    password: "12345",
-    images: [{ fileName: "JohnMuller" }],
-    id: 1,
-  },
-  {
-    name: "User Twsdfsdfsdfdsf",
-    username: "5654sf",
-    DateOfBirth: "16-3-2001",
-    role: "Admin",
-    countryCode: "+356",
-    phoneNumber: "79230094",
-    email: "user2@domain.com",
-    password: "12345",
-    images: [{ fileName: "maleAvatar" }],
-    id: 2,
-  },
-  {
-    name: "User Three",
-    username: "Usersdfs two",
-    DateOfBirth: "16-3-2001",
-    role: "user",
-    countryCode: "+356",
-    phoneNumber: "79230093",
-    email: "user3@domain.com",
-    password: "12345",
-    images: [{ fileName: "maleAvatar" }],
-    id: 3,
-  },
-  {
-    name: "User Four",
-    username: "User sdftwo",
-    DateOfBirth: "16-3-2001",
-    role: "user",
-    countryCode: "+356",
-    phoneNumber: "79230092",
-    email: "user4@domain.com",
-    password: "12345",
-    images: [{ fileName: "maleAvatar" }],
-    id: 4,
-  },
-  {
-    name: "User Five",
-    username: "User sdfsdftwo",
-    DateOfBirth: "16-3-2001",
-    role: "user",
-    countryCode: "+356",
-    phoneNumber: "79230091",
-    email: "user5@domain.com",
-    password: "12345",
-    images: [{ fileName: "maleAvatar" }],
-    id: 5,
-  },
-  {
-    name: "Dolphin Pools App",
-    email: "admin@Dolphinpools.com",
-    password: "12345",
-    username: "Dolphin1_1App",
-    countryCode: "+356",
-    phoneNumber: "79230090",
-    role: "Administrator",
-    images: [{ fileName: "DolphinPoolApp" }],
-    id: 6,
-  },
-];
+// ? * --> Variables
+const saltRounds = 15;
 
-let usersDetails = [
-  {
-    id: 1,
-    name: users[1].name,
-    email: users[1].email,
-    username: users[1].username,
-    phoneNumber: users[1].phoneNumber,
-    ...userImageMapper(users[1].images),
-    role: users[1].role,
-  },
-  {
-    id: 2,
-    name: users[2].name,
-    email: users[2].email,
-    username: users[2].username,
-    phoneNumber: users[2].phoneNumber,
-    ...userImageMapper(users[0].images),
-    role: users[2].role,
-  },
-  {
-    id: 3,
-    name: users[3].name,
-    email: users[3].email,
-    username: users[3].username,
-    phoneNumber: users[3].phoneNumber,
-    ...userImageMapper(users[3].images),
-    role: users[3].role,
-  },
-  {
-    id: 4,
-    name: users[4].name,
-    email: users[4].email,
-    username: users[4].username,
-    phoneNumber: users[4].phoneNumber,
-    ...userImageMapper(users[4].images),
-    role: users[4].role,
-  },
-  {
-    id: 5,
-    name: users[5].name,
-    email: users[5].email,
-    username: users[5].username,
-    phoneNumber: users[5].phoneNumber,
-    ...userImageMapper(users[5].images),
-    role: users[5].role,
-  },
-];
+// ? * -->
+/// *-->// create new user
+async function addUser(user) {
+  try {
+    const newUser = await userObject.create({
+      name: user.name,
+      email: user.email,
+      password: user.password,
+      username: user.username,
+      countryCode: user?.countryCode ? user.countryCode : "+356",
+      phoneNumber: user.phoneNumber,
+      dateOfBirth: user?.dateOfBirth ? new Date(user.dateOfBirth) : undefined,
+      role: user?.role ? user.role : "user",
+      gender: user?.gender ? user.gender : true,
+      address: user?.address ? user.address : undefined,
+      image: user.image,
+    });
+    newUser.image = await userImageMapper(newUser.image)[0];
+    return newUser;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+}
 
-const addUser = (user) => {
-  user.id = users.length + 1;
-  users.push(user);
-  users.sort((userA, userB) => userA.id - userB.id);
-  console.log(user);
-  console.log(getUsers());
-};
+/// *-->// Delete single user
+async function deleteUser(id) {
+  const dbRes = await userObject.deleteOne(id);
+  return dbRes;
+}
 
-const deleteUser = (userID) => {
-  console.log(userID);
-  users = users.filter((user) => user.id !== userID);
-  usersDetails = usersDetails.filter((user) => user.id !== userID);
-  listingsStore.deleteList(userID, true);
-};
+/// *-->// Get * all users
+async function getUsers() {
+  try {
+    const users = await userObject.find();
+    users.forEach((user) => {
+      user.image = userImageMapper(user.image)[0];
+    });
+    return users;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 
-const getUsers = () => users;
+/// *-->// get * users details
+async function getUsersDetails() {
+  try {
+    const users = await userObject
+      .find()
+      .select([
+        "name",
+        "username",
+        "email",
+        "role",
+        "_id",
+        "listingsLength",
+        "image",
+      ]);
+    users.forEach((user) => {
+      user.image = userImageMapper(user.image)[0];
+    });
+    return users;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+}
 
-const getUserById = (id) => users.find((user) => user.id === id);
+/// *-->// Get single user by Id
+async function getUserById(id, image) {
+  try {
+    const user = await userObject.findById(id);
+    if (image) user.image = userImageMapper(user.image)[0];
+    return user;
+  } catch (error) {
+    console.error("error");
+  }
+}
 
-const getUserByEmail = (email) => users.find((user) => user.email === email);
+/// *-->// Get user by email
+async function getUserByEmail(email, image) {
+  const user = await userObject.where("email").equals(email);
+  if (image) user[0].image = userImageMapper(user[0].image)[0];
+  return user[0];
+}
 
-const getUserByPhoneNumber = (phoneNumber) =>
-  users.find((user) => user.phoneNumber === phoneNumber);
+/// *-->// Get user by Phone number
+async function getUserByPhoneNumber(phoneNumber) {
+  const dbResponse = await userObject.where("phoneNumber").equals(phoneNumber);
+  return dbResponse.length !== 0 ? dbResponse : null;
+}
 
-const getUserUsername = (username) =>
-  users.find((user) => user.username === username);
+/// *-->// Get user by username
+async function getUserUsername(username) {
+  const dbResponse = await userObject.where("username").equals(username);
+  return dbResponse.length !== 0 ? dbResponse : null;
+}
 
-const updateUser = (id) => {
-  let user = users.find((user) => user.id === id);
-  users = users.filter((user) => user.id != id);
-  return user;
-};
+/// *-->// Update single user
+async function updateUser(user) {
+  const userData = await userObject.findById(user._id);
+  if (userData?._id == null) return { flag: "notFound" };
+  userData.name = user?.name != null ? user.name : userData.name;
+  userData.username =
+    user?.username != null ? user.username : userData.username;
+  userData.email = user?.email != null ? user.email : userData.email;
+  userData.address = user?.address != null ? user.address : userData.address;
+  userData.countryCode =
+    user?.countryCode != null ? user.countryCode : userData.countryCode;
+  userData.phoneNumber =
+    user?.phoneNumber != null ? user.phoneNumber : userData.phoneNumber;
+  userData.gender = user?.gender != null ? user.gender : userData.gender;
+  userData.dateOfBirth =
+    user?.dateOfBirth != null ? user.dateOfBirth : userData.dateOfBirth;
+  userData.role = user?.role != null ? user.role : userData.role;
+
+  if (user.updatePassword) {
+    userData.password =
+      user?.password != null ? user.password : userData.password;
+  }
+  try {
+    const updatedUser = await userData.save();
+    return { updatedUser: updatedUser, flag: "updated" };
+  } catch (error) {
+    console.error(error);
+    return { error: error, flag: error };
+  }
+}
 
 module.exports = {
   addUser,
@@ -165,5 +145,6 @@ module.exports = {
   getUserById,
   getUserByPhoneNumber,
   getUserUsername,
+  getUsersDetails,
   updateUser,
 };

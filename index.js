@@ -2,7 +2,6 @@ const express = require("express");
 const helmet = require("helmet");
 const compression = require("compression");
 const config = require("config");
-
 //const io = require("socket.io")(port);
 
 const categories = require("./routes/categories");
@@ -23,7 +22,7 @@ const dataBase = mongoose.connection;
 const app = express();
 
 const port = process.env.PORT || config.get("port");
-const dataBaseUrl = process.env.dataBaseUrl || config.get("DATABASE_URL");
+const dataBaseUrl = process.env.dataBaseUrl || config.get("dataBaseUrl");
 const localIP = process.env.localIpAddress || config.get("localIpAddress");
 
 app.use(express.static("public"));
@@ -36,7 +35,7 @@ app.use("/api/categories", categories);
 app.use("/api/listing", listing);
 app.use("/api/listings", listings);
 app.use("/api/comments", comments);
-app.use("/api/errorLogs", errorLogs);
+app.use("/api/errors", errorLogs);
 app.use("/api/user", user);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
@@ -50,7 +49,7 @@ app.use("/api/images", images);
 //   socket.join(id)
 // })
 
-mongoose.connect(dataBaseUrl, {
+mongoose.connect(dataBaseUrl + "DolphinPoolsLtdApp", {
   useNewUrlParser: true,
 });
 

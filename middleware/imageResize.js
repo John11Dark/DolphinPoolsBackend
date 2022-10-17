@@ -25,7 +25,11 @@ module.exports = async (req, res, next) => {
 
   await Promise.all([...resizePromises]);
 
-  req.images = images;
+  if (req.flag === "user") {
+    req.image = images;
+  } else {
+    req.images = images;
+  }
 
   next();
 };

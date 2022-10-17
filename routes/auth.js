@@ -1,33 +1,39 @@
 const express = require("express");
-const router = express.Router();
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
+const config = require("config");
+
 const usersStore = require("../store/users");
 const validateWith = require("../middleware/validation");
-const userImageMapper = require("../mappers/userImagesMapper");
 
+const router = express.Router();
+const KEY = process.env.JWT_KEY || config.get("JWT_KEY");
 const schema = {
   email: Joi.string().email().required(),
   password: Joi.string().required().min(5),
 };
 
-router.post("/", validateWith(schema), (req, res) => {
+router.post("/", validateWith(schema), async (req, res) => {
   const { email, password } = req.body;
-  const user = usersStore.getUserByEmail(email);
+  const user = await usersStore.getUserByEmail(email, true);
   if (!user || user.password !== password)
     return res.status(400).send({ error: "Invalid email or password." });
 
   const token = jwt.sign(
     {
-      userId: user.id,
+      userId: user._id,
       name: user.name,
-      phoneNumber: user.phoneNumber,
       username: user.username,
-      ...userImageMapper(user.images),
+      countryCode: user.countryCode,
+      phoneNumber: user.phoneNumber,
       role: user.role,
       email: user.email,
+      gender: user.gender,
+      dateOfBirth: user.dateOfBirth,
+      createdAt: user.createdAt,
+      image: user.image,
     },
-    "jwtPrivateKey"
+    KEY
   );
   res.send(token);
 });

@@ -5,18 +5,13 @@ const store = require("../store/errorLogs");
 
 router.get("/", (req, res) => {
   const errorsList = store.getErrors();
-  res.status(201).send(errorsList);
+  res.status(201).send();
 });
 
 router.post("/", async (req, res) => {
   store.postErrors(req.body);
-
-  res.status(201).send(req.body);
+  // console.log(req);
+  res.status(201).send({ message: "error received " });
 });
-
-// router.delete("/:id", (req, res) => {
-//   const id = parseInt(req.params.id);
-//   store.deleteList(id);
-// });
 
 module.exports = router;

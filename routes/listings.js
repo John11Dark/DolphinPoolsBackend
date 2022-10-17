@@ -66,6 +66,14 @@ const schema = {
   poolType: Joi.required(),
   poolSteps: Joi.required(),
   poolLeaking: Joi.optional(),
+  whiteGoodsOnly: Joi.optional(),
+  extraLights: Joi.optional(),
+  extra: Joi.optional(),
+
+  // if refreshment pool
+  optionOne: Joi.optional(),
+  optionTwo: Joi.optional(),
+  optionThree: Joi.optional(),
 
   // ? * -->  Pool parameters required
   poolLength: Joi.required(),
@@ -131,7 +139,7 @@ router.post(
     try {
       //  * --> get data from the body
       const data = req.body;
-      console.log(data);
+      console.table(data);
 
       // initialize and declare the list * -->
 
@@ -204,7 +212,7 @@ router.post(
       // ? *--> send response that everything ok
       res.status(201).send();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send({
         error:
           "unknown error occurred on the server please contact the administrator",

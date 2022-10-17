@@ -7,9 +7,7 @@ const mapper = (userImages) => {
     thumbnailUrl: `${baseUrl}${image.fileName}_thumb.jpg`,
   });
 
-  return {
-    images: userImages.map(mapImage),
-  };
+  return userImages.map(mapImage);
 };
 
 module.exports = mapper;

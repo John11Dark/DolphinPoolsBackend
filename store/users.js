@@ -90,7 +90,9 @@ async function getUserById(id, image) {
 /// *-->// Get user by email
 async function getUserByEmail(email, image) {
   const user = await userObject.where("email").equals(email);
-  if (image) user[0].image = userImageMapper(user[0].image)[0];
+  console.log(user);
+  if (image && user?.length != 0)
+    user[0].image = userImageMapper(user[0].image)[0];
   return user[0];
 }
 

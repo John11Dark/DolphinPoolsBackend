@@ -8,7 +8,13 @@ module.exports = (req, res, next) => {
   try {
     const payload = jwt.verify(token, process.env.JWT_KEY);
     req.user = payload;
-    next();
+    if (req.user.role.toLowerCase() === "administrator") {
+      next();
+    } else {
+      return res
+        .status(401)
+        .send({ error: "Access denied. You must be an admin." });
+    }
   } catch (err) {
     res.status(400).send({ error: "Invalid token." });
   }

@@ -44,6 +44,16 @@ router.get("/:id/listings", auth, async (req, res) => {
   }
 });
 
+// router.get("/listings", auth, (req, res) => {
+//   const listings = listingsStore.filterListings(
+//     listing => listing.userId === req.user.userId
+//   );
+//   const resources = listings.map(listingMapper);
+//   res.send(resources);
+// });
+
+// module.exports = router;
+
 /// *-->// update single user
 
 router.patch("/:id", auth, async (req, res) => {

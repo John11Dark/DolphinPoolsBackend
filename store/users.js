@@ -11,21 +11,22 @@ const saltRounds = 15;
 /// *-->// create new user
 async function addUser(user) {
   try {
-    const newUser = await userObject.create({
+    const userInstance = await userObject.create({
       name: user.name,
       email: user.email,
       password: user.password,
       username: user.username,
       countryCode: user?.countryCode ? user.countryCode : "+356",
       phoneNumber: user.phoneNumber,
-      dateOfBirth: user?.dateOfBirth ? new Date(user.dateOfBirth) : undefined,
+      dateOfBirth: new Date(user.dateOfBirth),
       role: user?.role ? user.role : "user",
       gender: user?.gender ? user.gender : true,
-      address: user?.address ? user.address : undefined,
+      address: user?.address,
       image: user.image,
     });
-    newUser.image = await userImageMapper(newUser.image)[0];
-    return newUser;
+    userInstance.image = await userImageMapper(userInstance.image)[0];
+    console.log(userInstance);
+    return userInstance;
   } catch (error) {
     console.error(error);
     return error;
@@ -90,7 +91,6 @@ async function getUserById(id, image) {
 /// *-->// Get user by email
 async function getUserByEmail(email, image) {
   const user = await userObject.where("email").equals(email);
-  console.log(user);
   if (image && user?.length != 0)
     user[0].image = userImageMapper(user[0].image)[0];
   return user[0];

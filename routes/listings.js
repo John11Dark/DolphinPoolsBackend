@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 const multer = require("multer");
+const config = require("config");
 
 // custom libraries
 const store = require("../store/listings");
@@ -11,7 +12,6 @@ const auth = require("../middleware/auth");
 const imageResize = require("../middleware/imageResize");
 const delay = require("../middleware/delay");
 const listingMapper = require("../mappers/listings");
-const config = require("config");
 
 const upload = multer({
   dest: "uploads/",
@@ -69,6 +69,7 @@ const schema = {
   whiteGoodsOnly: Joi.optional(),
   extraLights: Joi.optional(),
   extra: Joi.optional(),
+  extraOptions: Joi.optional(),
 
   // if refreshment pool
   optionOne: Joi.optional(),
@@ -112,7 +113,7 @@ const schema = {
 };
 
 // get all listings
-router.get("/", (req, res) => {
+router.get("/", auth, (req, res) => {
   const listings = store.getListings();
   const resources = listings.map(listingMapper);
   res.status(201).send(resources);
@@ -131,8 +132,10 @@ router.post(
     // using a separate process.
     // auth,
     upload.array("images", config.get("maxImageCount")),
+    auth,
     validateWith(schema),
     imageResize,
+    delay,
   ],
 
   async (req, res) => {
@@ -222,13 +225,13 @@ router.post(
 );
 
 // update a list
-router.patch("/:id", (req, res) => {
+router.patch("/:id", auth, (req, res) => {
   const id = parseInt(req.params.id);
   store.updateList(id, req.body);
 });
 
 // delete a list
-router.delete("/:id", (req, res) => {
+router.delete("/:id", auth, (req, res) => {
   const id = parseInt(req.params.id);
   store.deleteList(id);
   return res.status(201).send();
@@ -242,13 +245,13 @@ router.patch("/recycleBin/:id", auth, (req, res) => {
 });
 
 // get archived listings
-router.get("/recycleBin", (req, res) => {
+router.get("/recycleBin", auth, (req, res) => {
   const listings = store.getDeletedListings();
   const resources = listings.map(listingMapper);
   return res.status(201).send(resources);
 });
 // add list to archive
-router.patch("/archive/:id", async (req, res) => {
+router.patch("/archive/:id", auth, async (req, res) => {
   const id = parseInt(req.params.id);
   const listing = store.getListing(id);
   if (listing === undefined || listing === null || listing === -1)
@@ -258,14 +261,14 @@ router.patch("/archive/:id", async (req, res) => {
 });
 
 // get archived listings
-router.get("/archived", (req, res) => {
+router.get("/archived", auth, (req, res) => {
   const listings = store.getArchivedListings();
   const resources = listings.map(listingMapper);
   res.status(201).send(resources);
 });
 
 // unarchive list
-router.patch("/unarchive/:id", (req, res) => {
+router.patch("/unarchive/:id", auth, (req, res) => {
   const id = parseInt(req.params.id);
   const listing = store.unarchive(id);
   if (listing == null)

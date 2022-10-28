@@ -44,14 +44,11 @@ router.post(
         username: req.body.username,
         countryCode: req.body?.countryCode,
         phoneNumber: req.body.phoneNumber,
+        dateOfBirth: req.body.dateOfBirth,
         role: req.body?.role,
         gender: req.body?.gender,
-        dateOfBirth: req.body?.dateOfBirth,
         address: req.body?.address,
-        image:
-          req.body?.image != null
-            ? req.body.image
-            : [{ fileName: `${req.body.gender ? "male" : "female"}Avatar` }],
+        image: req.body.image,
       };
       const emailExists = await usersStore.getUserByEmail(user.email);
       const userNameExists = await usersStore.getUserUsername(user.username);
@@ -81,13 +78,24 @@ router.post(
 );
 
 /// *-->// Get * users router
-router.get("/", async (_, res) => {
+router.get("/", auth, async (_, res) => {
   const users = await usersStore.getUsers();
   res.status(201).send(users);
 });
 
+/// *-->// Get * users router
+router.post("/forgetPassword", async (req, res) => {
+  console.log(req.data);
+  const user = await usersStore.getUserByPhoneNumber(req.body.phoneNumber);
+  if (!user)
+    res.status(404).send({
+      message: "no user found with this phone number + 356 (79230096)",
+    });
+  res.status(201).send(user);
+});
+
 /// *-->// Get * users with specific Query router
-router.get("/details", async (_, res) => {
+router.get("/details", auth, async (_, res) => {
   const users = await usersStore.getUsersDetails();
   res.status(201).send(users);
 });
